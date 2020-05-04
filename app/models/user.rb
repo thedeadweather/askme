@@ -5,15 +5,25 @@ class User < ApplicationRecord
   ITERATIONS = 20_000
   DIGEST = OpenSSL::Digest::SHA256.new
 
+  # виртуальный аттрибут
+  attr_accessor :password
+
   has_many :questions
   validates :email, :username, presence: true
   validates :email, :username, uniqueness: true
 
-  # виртуальный аттрибут
-  attr_accessor :password
-
   validates_presence_of :password, on: :create
   validates_confirmation_of :password
+
+  # проверка формата почты
+  EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(?:\.[a-z\d\-]+)*\.[a-z]+\z/i
+  validates :email, format: { with: EMAIL_REGEX }
+  # проверка на макс длину в 40 символов, проверка на уникальность без учета регистра букв, проверка на формат
+  USERNAME_REGEX = /\A[\w\d\_]+\z/i
+  validates :username, length: { maximum: 40 }, uniqueness: { case_sensitive: false }, format: { with: USERNAME_REGEX }
+  # сохранять в БД почту и имя в нижнем регистре
+  before_save { self.username.downcase! }
+
 
   before_save :encrypt_password
 
