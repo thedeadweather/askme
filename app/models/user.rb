@@ -20,9 +20,9 @@ class User < ApplicationRecord
   validates :email, format: { with: EMAIL_REGEX }
   # проверка на макс длину в 40 символов, проверка на уникальность без учета регистра букв, проверка на формат
   USERNAME_REGEX = /\A[\w\d\_]+\z/i
-  validates :username, length: { maximum: 40 }, uniqueness: { case_sensitive: false }, format: { with: USERNAME_REGEX }
+  validates :username, length: { maximum: 40 }, uniqueness: true, format: { with: USERNAME_REGEX }
   # сохранять в БД почту и имя в нижнем регистре
-  before_save { self.username.downcase! }
+  before_validation { self.username.downcase! }
 
 
   before_save :encrypt_password
