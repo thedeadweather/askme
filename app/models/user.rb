@@ -4,45 +4,25 @@ class User < ApplicationRecord
   # Параметры работы для модуля шифрования паролей
   ITERATIONS = 20_000
   DIGEST = OpenSSL::Digest::SHA256.new
+  EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(?:\.[a-z\d\-]+)*\.[a-z]+\z/i
+  USERNAME_REGEX = /\A[\w\d\_]*\z/i
 
   # виртуальный аттрибут
   attr_accessor :password
 
   has_many :questions
-  validates :email, :username, presence: true
-  validates :email, :username, uniqueness: true
 
-  validates_presence_of :password, on: :create
-  validates_confirmation_of :password
-
+  validates :email, :username, presence: true, uniqueness: true
+  validates :password, confirmation: true, presence: true, on: :create
+  validates :password_confirmation, presence: true
   # проверка формата почты
-  EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(?:\.[a-z\d\-]+)*\.[a-z]+\z/i
   validates :email, format: { with: EMAIL_REGEX }
   # проверка на макс длину в 40 символов, проверка на уникальность без учета регистра букв, проверка на формат
-  USERNAME_REGEX = /\A[\w\d\_]+\z/i
   validates :username, length: { maximum: 40 }, uniqueness: true, format: { with: USERNAME_REGEX }
   # сохранять в БД почту и имя в нижнем регистре
-  before_validation { self.username.downcase! }
-
 
   before_save :encrypt_password
-
-  def encrypt_password
-    if password.present?
-      # Создаем «соль» — рандомная строка усложняющая задачу по взлому
-      self.password_salt = User.hash_to_string(OpenSSL::Random.random_bytes(16))
-
-      # Создаем хэш пароля — длинная уникальная строка, из которой невозможно
-      # восстановить исходный пароль. Однако, если правильный пароль у нас есть,
-      # мы легко можем получить такую же строку и сравнить её с той, что в базе.
-      self.password_hash = User.hash_to_string(
-        OpenSSL::PKCS5.pbkdf2_hmac(
-          password, password_salt, ITERATIONS, DIGEST.length, DIGEST
-        )
-      )
-      # Оба поля окажутся записанными в базу при сохранении.
-    end
-  end
+  before_validation :downcase_letters!
 
   # Служебный метод, преобразующий бинарную строку в 16-ричный формат,
   # для удобства хранения.
@@ -58,19 +38,41 @@ class User < ApplicationRecord
     user = find_by(email: email)
     # Если пользователь не найдет, возвращаем nil
     return nil unless user.present?
-
     # Формируем хэш пароля из того, что передали в метод
     hashed_password = User.hash_to_string(
       OpenSSL::PKCS5.pbkdf2_hmac(
         password, user.password_salt, ITERATIONS, DIGEST.length, DIGEST
       )
     )
-
     # Сравнивается password_hash, а оригинальный пароль так
     # никогда и не сохраняется нигде.
     # Если пароли совпали, возвращаем пользователя.
     return user if user.password_hash == hashed_password
     # Иначе, возвращаем nil
     nil
+  end
+
+  private
+
+  def downcase_letters!
+    self.username.downcase!
+    self.email.downcase!
+    return nil
+  end
+
+  def encrypt_password
+    if password.present?
+      # Создаем «соль» — рандомная строка усложняющая задачу по взлому
+      self.password_salt = User.hash_to_string(OpenSSL::Random.random_bytes(16))
+      # Создаем хэш пароля — длинная уникальная строка, из которой невозможно
+      # восстановить исходный пароль. Однако, если правильный пароль у нас есть,
+      # мы легко можем получить такую же строку и сравнить её с той, что в базе.
+      self.password_hash = User.hash_to_string(
+        OpenSSL::PKCS5.pbkdf2_hmac(
+          password, password_salt, ITERATIONS, DIGEST.length, DIGEST
+        )
+      )
+      # Оба поля окажутся записанными в базу при сохранении.
+    end
   end
 end
