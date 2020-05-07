@@ -12,7 +12,7 @@ class User < ApplicationRecord
 
   has_many :questions
 
-  validates :email, :username, presence: true, uniqueness: { case_sensitive: false }
+  validates :email, :username, presence: true, uniqueness: true
   # проверка формата почты
   validates :email, format: { with: EMAIL_REGEX }
   # проверка на макс длину в 40 символов, проверка на уникальность без учета регистра букв, проверка на формат
@@ -22,7 +22,7 @@ class User < ApplicationRecord
   validates :password_confirmation, presence: true
 
   before_save :encrypt_password
-  after_validation :downcase_letters!
+  before_validation :downcase_letters!
 
   # Служебный метод, преобразующий бинарную строку в 16-ричный формат,
   # для удобства хранения.
@@ -55,8 +55,8 @@ class User < ApplicationRecord
   private
 
   def downcase_letters!
-    self.username.downcase!
-    self.email.downcase!
+    self.username.downcase! if self.username.present?
+    self.email.downcase! if self.email.present?
   end
 
   def encrypt_password

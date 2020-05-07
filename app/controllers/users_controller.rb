@@ -1,6 +1,15 @@
 class UsersController < ApplicationController
 
+  def index
+  end
+
+  def new
+  end
+
+  def edit
+  end
+
   def show
-   @hello = 'Hi, Alex'
+    @user = User.new(name: "Ali", username: "Baba")
   end
 end
