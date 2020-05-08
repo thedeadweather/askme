@@ -10,7 +10,7 @@ class User < ApplicationRecord
   # виртуальный аттрибут
   attr_accessor :password
 
-  has_many :questions
+  has_many :questions, dependent: :destroy
 
   validates :email, :username, presence: true, uniqueness: true
   # проверка формата почты
@@ -55,8 +55,8 @@ class User < ApplicationRecord
   private
 
   def downcase_letters!
-    self.username.downcase! if self.username.present?
-    self.email.downcase! if self.email.present?
+    self&.username&.downcase!
+    self&.email&.downcase!
   end
 
   def encrypt_password
