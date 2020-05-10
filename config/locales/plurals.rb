@@ -3,7 +3,7 @@
     { :plural =>
       { :keys => [:one, :few, :other],
         :rule => lambda { |n|
-          if (n % 100 >= 11 && n % 100 <= 14)
+          if n % 100 >= 11 && n % 100 <= 14
             :other
           elsif n % 10 == 1
             :one
