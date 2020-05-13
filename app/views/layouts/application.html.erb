@@ -22,6 +22,18 @@
   	
   	<div class="content">
       <div class="container">
+        <%# Выводим сообщение об ошибке или уведомление для пользователя. %>
+        <%# Если в объекте flash есть что-то, выводим содержимое на страницу, %>
+        <%# если нет, игнорируем этот блок. %>
+        <%# во flash передается из экшена create с помощью :notice %>
+        <% if flash.any? %>
+          <div class="content-wrapper buffer-both">
+            <% flash.each do |name, message| %>
+              <%= content_tag :div, message, class: "flash-#{name}" %>
+            <% end %>
+          </div>
+        <% end %>
+
         <%= yield %>
   	  </div>
   	</div>

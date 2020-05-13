@@ -1,32 +1,48 @@
 class UsersController < ApplicationController
 
+  before_action :load_user, except: [:index, :new, :create]
+
   def index
-    @users = [
-      User.new(
-        id: 1,
-        name: 'Alx',
-        username: 'usrnumbavan',
-        avatar_url: ''
-      ),
-      User.new(id: 2, name: 'Vasily', username: 'funfun')
-    ]
+    @users = User.all
   end
 
   def new
+    @user = User.new
   end
 
   def edit
   end
 
+  def create
+    @user = User.new(user_params)  # params берем из формы вьюхи users/new.html.erb
+    if @user.save
+      redirect_to root_url, notice: 'Пользователь зарегистрирован!'
+    else
+      render 'new'
+    end
+  end
+
+  def update
+    if @user.update(user_params)
+      redirect_to user_path(@user), notice: 'Данные обновлены!'
+    else
+      render 'edit'
+    end
+  end
+
   def show
-    @user = User.new(name: "bob", username: "superman")
-    # массив вопросов (отображается с помощью partial views/questions/_question)
-    @questions = [
-      Question.new(text: 'How much in the fish?', created_at: Date.parse('01.05.2020')),
-      Question.new(text: 'What can i do?', created_at: Date.parse('02.05.2020')),
-      Question.new(text: 'Whats up?', created_at: Date.parse('12.02.2019'))
-    ]
-    # создается с помощью формы form-for в show.html.erb
-    @new_question = Question.new
+    @questions = @user.questions.order(created_at: :desc)
+    @new_question = @user.questions.build
+  end
+
+  private
+
+  def user_params
+    params.require(:user).permit(:name, :username, :email, :password, :password_confirmation,
+                                 :avatar_url)
+  end
+
+  def load_user
+    @user ||= User.find params[:id]
   end
 end
