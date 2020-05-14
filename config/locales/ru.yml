@@ -1,7 +1,21 @@
 ru:
   question:
-    zero: '%{count} вопросов'
-    one: '%{count} вопрос'
-    few: '%{count} вопроса'
-    many: '%{count} вопросов'
+    zero: 'вопросов'
+    one: 'вопрос'
+    few: 'вопроса'
+    many: 'вопросов'
     other: 'вопросы'
+
+  answer:
+    zero: 'ответов'
+    one: 'ответ'
+    few: 'ответа'
+    many: 'ответов'
+    other: 'ответы'
+
+  noanswer:
+    zero: 'безответных'
+    one: 'безответный'
+    few: 'безответных'
+    many: 'безответных'
+    other: 'безответные'
