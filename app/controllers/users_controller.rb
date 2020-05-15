@@ -44,12 +44,8 @@ class UsersController < ApplicationController
   end
 
   def destroy
-    if current_user == @user
-      @user.destroy
-      redirect_to root_path, notice: 'Юзер удален!'
-    else
-      redirect_to user_path(@user)
-    end
+    @user.destroy
+    redirect_to root_path, notice: 'Юзер удален!'
   end
 
   private
