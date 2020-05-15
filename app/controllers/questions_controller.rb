@@ -36,21 +36,20 @@ class QuestionsController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def load_question
-      @question = Question.find(params[:id])
-    end
+  def load_question
+    @question = Question.find(params[:id])
+  end  # Only allow a trusted parameter "white list" through.
 
-    # Only allow a trusted parameter "white list" through.
-    def question_params
-      if current_user.present? && params[:question][:user_id].to_i == current_user.id
-        params.require(:question).permit(:user_id, :text, :answer)
-      else
-        params.require(:question).permit(:user_id, :text)
-      end
+  def question_params
+    if current_user.present? && params[:question][:user_id].to_i == current_user.id
+      params.require(:question).permit(:user_id, :text, :answer)
+    else
+      params.require(:question).permit(:user_id, :text)
     end
+  end
 
-    def authorize_user
-    #reject_user определен в application_controller.rb
-    reject_user unless @question.user == current_user
-    end
+  def authorize_user
+  #reject_user определен в application_controller.rb
+  reject_user unless @question.user == current_user
+  end
 end

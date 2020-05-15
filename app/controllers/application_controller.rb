@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-
   helper_method :current_user
 
   private
@@ -9,6 +8,6 @@ class ApplicationController < ActionController::Base
   end
 
   def reject_user
-    redirect_to root_url, alert: 'сюда нельзя!'
+    redirect_to root_path, alert: 'сюда нельзя!'
   end
 end
