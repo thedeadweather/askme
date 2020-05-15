@@ -29,3 +29,16 @@
   line-height: 15px;
   padding: 7px 15px;
 }
+
+.del-button {
+  margin: 30px auto;
+  /*border: 3px solid #2e2f41;*/
+  /*border-radius: 3px;*/
+  text-align: right;
+  text-shadow: 2px 1px 1px rgba(0, 0, 0, 0.15);
+}
+
+.del-link {
+  color: #dc554f;
+  font-weight: bold;
+}

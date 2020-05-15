@@ -34,3 +34,8 @@
   list-style: none;
   margin-bottom: 10px;
 }
+
+.del-field {
+  height: 60px;
+  width: 50%;
+}
