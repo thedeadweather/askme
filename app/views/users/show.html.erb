@@ -1,4 +1,8 @@
-<div class="user-header text-center">
+<% if @user.profile_color.present? && current_user == @user %>
+  <div class="user-header text-center" style="<%= "background: #{@user.profile_color}" %>">
+<% else %>
+  <div class="user-header text-center">
+<% end %>
   <h1 class="title-medium">
     <%= @user.name %>
   </h1>
@@ -63,11 +67,4 @@
       <% end %>
     </div>
   </div>
-</div>
-
-
-
-
-<div class="question-counter">
-
 </div>
