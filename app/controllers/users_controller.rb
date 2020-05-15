@@ -20,7 +20,8 @@ class UsersController < ApplicationController
 
     @user = User.new(user_params)  # params берем из формы вьюхи users/new.html.erb
     if @user.save
-      redirect_to root_url, notice: 'Пользователь зарегистрирован!'
+      session[:user_id] = @user.id
+      redirect_to user_path(@user), notice: 'Пользователь зарегистрирован!'
     else
       render 'new'
     end
