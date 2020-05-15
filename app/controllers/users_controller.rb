@@ -3,11 +3,11 @@ class UsersController < ApplicationController
   before_action :authorize_user, except: [:index, :new, :create, :show]
 
   def index
-    @users = User.all
+    @users = User.all.order(created_at: :asc)
   end
 
   def new
-    redirect_to root_url, alert: 'Вы уже залогинились' if current_user.present?
+    redirect_to root_path, alert: 'Вы уже залогинились' if current_user.present?
     @user = User.new
   end
 
@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   end
 
   def create
-    redirect_to root_url, alert: 'Вы уже залогинились' if current_user.present?
+    redirect_to root_path, alert: 'Вы уже залогинились' if current_user.present?
 
     @user = User.new(user_params)  # params берем из формы вьюхи users/new.html.erb
     if @user.save
