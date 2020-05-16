@@ -23,4 +23,9 @@ module ApplicationHelper
       when 5..9, 0 then 'вопросов'
     end
   end
+
+  def appropriated?(style)
+    style.match?(/\A(background: #[\d[:alpha:]]{3,6};?)\z/)
+  end
+
 end
