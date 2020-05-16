@@ -1,4 +1,4 @@
-<% if @user.profile_color.present? && current_user == @user %>
+<% if @user.profile_color.present? %>
   <div class="user-header text-center" style="<%= "background: #{@user.profile_color}" %>">
 <% else %>
   <div class="user-header text-center">

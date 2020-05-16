@@ -24,6 +24,8 @@ class User < ApplicationRecord
   before_save :encrypt_password
   before_validation :downcase_letters!
 
+  scope :sorted, -> { order :created_at }
+
   # Служебный метод, преобразующий бинарную строку в 16-ричный формат,
   # для удобства хранения.
   def self.hash_to_string(password_hash)
