@@ -49,7 +49,7 @@ class QuestionsController < ApplicationController
   end
 
   def authorize_user
-  #reject_user определен в application_controller.rb
-  reject_user unless @question.user == current_user
+    #reject_user определен в application_controller.rb
+    reject_user unless @question.user == current_user
   end
 end

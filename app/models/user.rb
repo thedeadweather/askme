@@ -11,6 +11,7 @@ class User < ApplicationRecord
   attr_accessor :password
 
   has_many :questions, dependent: :destroy
+  has_many :authorized_questions, class_name: 'Question', foreign_key: :author_id
 
   validates :email, :username, presence: true, uniqueness: true
   # проверка формата почты
