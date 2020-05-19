@@ -16,8 +16,8 @@
     <div class="question-date">
       <%= l(question.created_at, format: :short) %>
     </div>    
-    <%= link_to "@#{question.author.username}",
-        user_path(question.author), class: 'author-link' if question.author.present? %>
+    <%= link_to("@#{question.author.username}",
+        user_path(question.author), class: 'author-link') if question.author.present? %>
   </div>
   <%# Если адресат вопроса — текущий пользователь, он может редактировать вопрос %>
   <%# и отвечать на него %>
