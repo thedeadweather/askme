@@ -6,6 +6,7 @@ class User < ApplicationRecord
   DIGEST = OpenSSL::Digest::SHA256.new
   EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(?:\.[a-z\d\-]+)*\.[a-z]+\z/i
   USERNAME_REGEX = /\A[\w\d\_]*\z/i
+  COLOR_REGEX = /\A(#[\d[:alpha:]]{3,6};?)\z/
 
   # виртуальный аттрибут
   attr_accessor :password
@@ -16,11 +17,12 @@ class User < ApplicationRecord
   validates :email, :username, presence: true, uniqueness: true
   # проверка формата почты
   validates :email, format: { with: EMAIL_REGEX }
-  # проверка на макс длину в 40 символов, проверка на уникальность без учета регистра букв, проверка на формат
+  # проверка на макс длину в 40 символов, проверка на уникальность без учета регистрестра букв, проверка на формат
   validates :username, length: { maximum: 40 }, format: { with: USERNAME_REGEX }
   # сохранять в БД почту и имя в нижнем регистре
   validates :password, confirmation: true, presence: true, on: :create
   validates :password_confirmation, presence: true
+  validates :profile_color, format: { with: COLOR_REGEX }
 
   before_save :encrypt_password
   before_validation :downcase_letters!
