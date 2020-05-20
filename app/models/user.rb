@@ -6,7 +6,7 @@ class User < ApplicationRecord
   DIGEST = OpenSSL::Digest::SHA256.new
   EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(?:\.[a-z\d\-]+)*\.[a-z]+\z/i
   USERNAME_REGEX = /\A[\w\d\_]*\z/i
-  COLOR_REGEX = /\A(#[\d[:alpha:]]{3,6};?)\z/
+  COLOR_REGEX = /\A#\h{6}\z/
 
   # виртуальный аттрибут
   attr_accessor :password
@@ -22,7 +22,7 @@ class User < ApplicationRecord
   # сохранять в БД почту и имя в нижнем регистре
   validates :password, confirmation: true, presence: true, on: :create
   validates :password_confirmation, presence: true
-  validates :profile_color, format: { with: COLOR_REGEX }
+  validates :profile_color, format: { with: COLOR_REGEX }, allow_blank: true
 
   before_save :encrypt_password
   before_validation :downcase_letters!
