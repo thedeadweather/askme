@@ -1,0 +1,24 @@
+/*
+  Place all the styles related to the matching controller here.
+  They will automatically be included in application.css.
+*/
+.tag-title {
+  font-size: 20px;
+  margin-bottom: 6px;
+  color: white;
+}
+
+.tag-link {
+  display: inline-block;
+  color:  #3498db;
+  font-size: 12px;
+}
+
+.quest-owner {
+  display: inline-block;
+  color: #005a55;
+  font-size: 12px;
+  padding: 5px 15px;
+
+}
+
