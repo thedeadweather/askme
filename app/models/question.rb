@@ -1,25 +1,21 @@
 class Question < ApplicationRecord
-  TAG_REGEX = /#[[:word:]-]+/
 
   belongs_to :user
   belongs_to :author, class_name: 'User', optional: true
-  has_many :hashrelationships, dependent: :destroy
-  has_many :hashtags, through: :hashrelationships
+  has_many :hashtagquestions, dependent: :destroy
+  has_many :hashtags, through: :hashtagquestions
 
   validates :text, presence: true
   # проверка макс длины текста
   validates :text, length: { maximum: 255 }
 
-  after_save :create_hashtag
-  before_destroy :delete_hashtag
+  after_commit :create_hashtag, on: %i[create update]
+  after_commit :delete_hashtag, on: :destroy
 
   def create_hashtag
     find_hashtags.each do |t|
-      if Hashtag.where(text: t).blank?
-        hashtags.create(text: t)
-      elsif hashtags.where(text: t).blank?
-        hashtags << Hashtag.find_by(text: t)
-      end
+      tag = Hashtag.find_or_create_by(text: t)
+      hashtags << tag unless hashtags.include?(tag)
     end
   end
 
@@ -30,6 +26,6 @@ class Question < ApplicationRecord
   private
 
   def find_hashtags
-    (text.to_s.scan(TAG_REGEX) | answer.to_s.scan(TAG_REGEX)).map(&:downcase)
+    (text.to_s.scan(Hashtag::TAG_REGEX) | answer.to_s.scan(Hashtag::TAG_REGEX)).map(&:downcase)
   end
 end
