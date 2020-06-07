@@ -20,7 +20,7 @@ class Question < ApplicationRecord
   end
 
   def delete_hashtag
-    Hashtag.includes(:hashtagquestions).where(hashtagquestions: {hashtag_id: nil}).destroy_all
+    Hashtag.left_joins(:hashtagquestions).where(hashtagquestions: {hashtag_id: nil}).destroy_all
   end
 
   private
