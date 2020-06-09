@@ -1,8 +1,8 @@
 class Hashtag < ApplicationRecord
   TAG_REGEX = /#[[:word:]-]+/
 
-  has_many :hashtagquestions, dependent: :destroy
-  has_many :questions, through: :hashtagquestions
+  has_many :hashtag_questions, dependent: :destroy
+  has_many :questions, through: :hashtag_questions
 
   validates :text, presence: true, uniqueness: true
 

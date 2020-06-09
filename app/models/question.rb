@@ -2,8 +2,8 @@ class Question < ApplicationRecord
 
   belongs_to :user
   belongs_to :author, class_name: 'User', optional: true
-  has_many :hashtagquestions, dependent: :destroy
-  has_many :hashtags, through: :hashtagquestions
+  has_many :hashtag_questions, dependent: :destroy
+  has_many :hashtags, through: :hashtag_questions
 
   validates :text, presence: true
   # проверка макс длины текста
@@ -20,12 +20,13 @@ class Question < ApplicationRecord
   end
 
   def delete_hashtag
-    Hashtag.left_joins(:hashtagquestions).where(hashtagquestions: {hashtag_id: nil}).destroy_all
+    Hashtag.left_joins(:hashtag_questions).
+      where(hashtag_questions: {hashtag_id: nil}).destroy_all
   end
 
   private
 
   def find_hashtags
-    (text.to_s.scan(Hashtag::TAG_REGEX) | answer.to_s.scan(Hashtag::TAG_REGEX)).map(&:downcase)
+    "#{text} #{answer}".downcase.scan(Hashtag::TAG_REGEX).uniq
   end
 end
