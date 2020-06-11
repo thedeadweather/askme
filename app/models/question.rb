@@ -10,7 +10,17 @@ class Question < ApplicationRecord
   validates :text, length: { maximum: 255 }
 
   after_commit :create_hashtag, on: %i[create update]
-  after_commit :delete_hashtag, on: :destroy
+  after_commit :delete_hashtag, on: %i[destroy update]
+  after_commit :scan_changes, on: :update
+
+  def scan_changes
+    hashtags.each do |tag|
+      unless find_hashtags.include?(tag.text)
+        deleted_tag = HashtagQuestion.find_by(hashtag_id: tag.id, question_id: self)
+        deleted_tag.destroy
+      end
+    end
+  end
 
   def create_hashtag
     find_hashtags.each do |t|
