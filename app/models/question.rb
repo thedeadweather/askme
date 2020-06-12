@@ -9,20 +9,11 @@ class Question < ApplicationRecord
   # проверка макс длины текста
   validates :text, length: { maximum: 255 }
 
-  after_commit :create_hashtag, on: %i[create update]
   after_commit :delete_hashtag, on: %i[destroy update]
-  after_commit :scan_changes, on: :update
-
-  def scan_changes
-    hashtags.each do |tag|
-      unless find_hashtags.include?(tag.text)
-        deleted_tag = HashtagQuestion.find_by(hashtag_id: tag.id, question_id: self)
-        deleted_tag.destroy
-      end
-    end
-  end
+  after_commit :create_hashtag, on: %i[create update]
 
   def create_hashtag
+    hashtags.delete_all
     find_hashtags.each do |t|
       tag = Hashtag.find_or_create_by(text: t)
       hashtags << tag unless hashtags.include?(tag)
