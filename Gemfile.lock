@@ -68,6 +68,7 @@ GEM
       activesupport (>= 4.2.0)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
+    json (2.3.0)
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -130,6 +131,8 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    recaptcha (5.5.0)
+      json
     semantic_range (2.3.0)
     sprockets (4.0.0)
       concurrent-ruby (~> 1.0)
@@ -170,6 +173,7 @@ DEPENDENCIES
   rails (~> 6.0.2, >= 6.0.2.2)
   rails-i18n
   rails_12factor
+  recaptcha
   sqlite3 (~> 1.4)
   uglifier
   web-console (>= 3.3.0)
