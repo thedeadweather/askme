@@ -1,24 +1,18 @@
-# README
+Хорошие вопросы
+======
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Учебное приложение, аналог популярного ранее сайта askme.  
+Боевая версия [здесь](https://wannaaskyou.herokuapp.com/)
+___
 
-Things you may want to cover:
+На главной странице выведены все зарегистрированые пользватели, которым можно задать вопросы.
+К вопросам можно добавлять хештеги, список которых также выведен на главной странице.
+В целях защиты от спама при создании вопроса проводится проверка рекапчей.
+___
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Приложение написано на Ruby on Rails версии 6.0.3 и Ruby 2.7.0.  
+Перейдите в терминале в каталог с приложением и запустите следующие команды:  
+`bundle`  
+`rails db:migrate`  
+`rails s`  
+И приложение будет доступно на локальном сервере.
